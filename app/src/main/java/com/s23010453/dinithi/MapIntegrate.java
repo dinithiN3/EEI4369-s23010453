@@ -30,6 +30,7 @@ import java.util.List;
 
 public class MapIntegrate extends AppCompatActivity implements OnMapReadyCallback{
 
+    private Button sensorBtn;
     private Button btnGetPath;
     private EditText editTextText;
     public GoogleMap myMap;
@@ -41,6 +42,13 @@ public class MapIntegrate extends AppCompatActivity implements OnMapReadyCallbac
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_map);
+
+        sensorBtn = findViewById(R.id.sensorBtn);
+
+        sensorBtn.setOnClickListener(view -> {
+            Intent intent = new Intent(MapIntegrate.this, SensorIntegration.class);
+            startActivity(intent);
+        });
 
         editTextText = findViewById(R.id.editTextText);
         btnGetPath = findViewById(R.id.btnGetPath);

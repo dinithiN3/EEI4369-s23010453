@@ -4,7 +4,6 @@ import android.content.Context;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
-import android.hardware.SensorListener;
 import android.hardware.SensorManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
@@ -16,9 +15,8 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import java.util.List;
+public class SensorIntegration extends AppCompatActivity implements SensorEventListener {
 
-public class SensorIntegration extends AppCompatActivity {
     private SensorManager sensorManager;
     private Sensor tempSensor;
     private TextView textView;
@@ -42,7 +40,6 @@ public class SensorIntegration extends AppCompatActivity {
 
         mediaPlayer = MediaPlayer.create(this, R.raw.song);
 
-
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -50,15 +47,21 @@ public class SensorIntegration extends AppCompatActivity {
         });
     }
 
+    @Override
     protected void onResume() {
         super.onResume();
-        if (tempSensor != null)
-            sensorManager.registerListener((SensorEventListener) this, tempSensor, SensorManager.SENSOR_DELAY_NORMAL);
+        if (tempSensor != null) {
+            sensorManager.registerListener(this, tempSensor, SensorManager.SENSOR_DELAY_NORMAL);
+        }
     }
+
+    @Override
     protected void onPause() {
         super.onPause();
-        sensorManager.unregisterListener((SensorListener) this);
+        sensorManager.unregisterListener(this);
     }
+
+    @Override
     public void onSensorChanged(SensorEvent event) {
         float currentTemp = event.values[0];
         textView.setText("Current Temperature: " + currentTemp + "°C");
@@ -72,6 +75,8 @@ public class SensorIntegration extends AppCompatActivity {
         }
     }
 
-    public void onAccuracyChanged(Sensor sensor, int accuracy) {}
-
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+        // You can ignore this for now
+    }
 }
